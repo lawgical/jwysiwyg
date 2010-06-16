@@ -61,27 +61,21 @@
                         var action = arguments[0].toString();
                         var params = [];
 
-                        for (var i = 1; i < arguments.length; i++)
-                        {
-                                params[i - 1] = arguments[i];
-                        }
                         if (action == 'enabled')
                         {
                                 return this.data('wysiwyg') !== null;
                         }
-                        if (action in Wysiwyg)
+                        for (var i = 1; i < arguments.length; i++)
                         {
-                                return this.each(function ()
-                                {
-                                        $.data(this, 'wysiwyg').designMode();
-
-                                        Wysiwyg[action].apply(this, params);
-                                });
+                                params[i - 1] = arguments[i];
                         }
-                        else
+						retValue = null;
+                        this.each(function()
                         {
-                                return this;
-                        }
+                                $.data(this, 'wysiwyg').designMode();
+                                retValue = Wysiwyg[action].apply(this, params);
+                        });
+						return retValue;
                 }
 
                 var controls = { };
@@ -552,6 +546,7 @@
                                         self.editorDoc.execCommand('insertImage', false, szURL);
                                 }
                         }
+		                return this;
                 },
 
                 createLink: function (szURL)
@@ -576,24 +571,34 @@
                                         alert(self.options.messages.nonSelection);
                                 }
                         }
+						return this;
                 },
 
                 insertHtml: function (szHTML)
                 {
                         var self = $.data(this, 'wysiwyg');
                         self.insertHtml(szHTML);
+						return this;
                 },
 
                 insertTable: function(colCount, rowCount, filler)
                 {
                         $.data(this, 'wysiwyg').insertTable(colCount, rowCount, filler);
+						return this;
+                },
+
+                getContent: function()
+                {
+					    var self = $.data(this, 'wysiwyg');
+						return self.getContent();
                 },
 
                 setContent: function (newContent)
                 {
-                        var self = $.data(this, 'wysiwyg');
+					    var self = $.data(this, 'wysiwyg');
                         self.setContent(newContent);
                         self.saveContent();
+						return this;
                 },
 
                 clear: function ()
@@ -601,18 +606,21 @@
                         var self = $.data(this, 'wysiwyg');
                         self.setContent('');
                         self.saveContent();
+						return this;
                 },
 
                 removeFormat: function ()
                 {
                         var self = $.data(this, 'wysiwyg');
                         self.removeFormat();
+						return this;
                 },
 
                 save: function ()
                 {
                         var self = $.data(this, 'wysiwyg');
                         self.saveContent();
+						return this;
                 },
 
                 "document": function()
@@ -625,6 +633,7 @@
                 {
                         var self = $.data(this, 'wysiwyg');
                         self.destroy();
+						return this;
                 }
         });
 
@@ -653,16 +662,19 @@
                         }
                         this.editorDoc.execCommand('removeFormat', false, []);
                         this.editorDoc.execCommand('unlink', false, []);
+						return this;
                 },
                 destroy: function ()
                 {
                         $(this.element).remove();
                         $.removeData(this.original, 'wysiwyg');
                         $(this.original).show();
+						return this;
                 },
                 focus: function ()
                 {
                         this.editor.get(0).contentWindow.focus();
+						return this;
                 },
 
                 init: function (element, options)
@@ -969,6 +981,7 @@
                 setContent: function (newContent)
                 {
                         $(innerDocument(this.editor)).find('body').html(newContent);
+						return this;
                 },
                 insertHtml: function (szHTML)
                 {
@@ -989,6 +1002,7 @@
                                         this.editorDoc.execCommand('insertHTML', false, szHTML);
                                 }
                         }
+						return this;
                 },
                 insertTable: function(colCount, rowCount, filler)
                 {
@@ -1014,7 +1028,7 @@
                                 html.push('</tr>');
                         }
                         html.push('</tbody></table>');
-                        this.insertHtml(html.join(''));
+                        return this.insertHtml(html.join(''));
                 },
                 saveContent: function ()
                 {
@@ -1029,6 +1043,7 @@
 
                                 $(this.original).val(content);
                         }
+						return this;
                 },
 
                 withoutCss: function ()
@@ -1050,6 +1065,7 @@
                                         }
                                 }
                         }
+						return this;
                 },
 
                 appendMenu: function (cmd, args, className, fn, tooltip)
@@ -1057,7 +1073,7 @@
                         var self = this;
                         args = args || [];
 
-                        $('<li role="menuitem" UNSELECTABLE="on">' + (className || cmd) + '</li>').addClass(className || cmd).attr('title', tooltip).hover(addHoverClass, removeHoverClass).click(function ()
+                        return $('<li role="menuitem" UNSELECTABLE="on">' + (className || cmd) + '</li>').addClass(className || cmd).attr('title', tooltip).hover(addHoverClass, removeHoverClass).click(function ()
                         {
                                 if (fn)
                                 {
@@ -1079,7 +1095,7 @@
 
                 appendMenuSeparator: function ()
                 {
-                        $('<li role="separator" class="separator"></li>').appendTo(this.panel);
+                        return $('<li role="separator" class="separator"></li>').appendTo(this.panel);
                 },
 
                 appendControls: function ()
