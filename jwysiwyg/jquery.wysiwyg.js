@@ -1,5 +1,5 @@
 /**
- * WYSIWYG - jQuery plugin 0.8
+ * WYSIWYG - jQuery plugin 0.9
  *
  * Copyright (c) 2008-2009 Juan M Martinez
  * http://plugins.jquery.com/project/jWYSIWYG
@@ -277,7 +277,7 @@
                         visible: true,
                         exec: function ()
                         {
-							    var self = this;
+                                var self = this;
                                 if ($.modal)
                                 {
                                         $.modal($.fn.wysiwyg.defaults.formImageHtml, {
@@ -364,10 +364,9 @@
                         visible: true,
                         exec: function ()
                         {
-
+                                var self = this;
                                 if ($.fn.modal)
                                 {
-                                        var self = this;
                                         $.modal($.fn.wysiwyg.defaults.formTableHtml, {
                                                 onShow: function(dialog)
                                                 {
@@ -393,7 +392,6 @@
                                 else
                                 {
                                     if ($.fn.dialog){
-                                        var self = this;
                                         var dialog = $($.fn.wysiwyg.defaults.formTableHtml).appendTo('body');
                                         dialog.dialog({
                                             modal: true,
@@ -832,7 +830,7 @@
                         {
 						        if ($(this).filter(':visible'))
 								{
-									return;
+								        return;
 								}
                                 self.focus();
                         });
@@ -1124,7 +1122,7 @@
                                 }
                                 this.appendMenu(
                                         control.command || name,
-                                        control['arguments'] || [],
+                                        control['arguments'] || '',
                                         control.className || control.command || name || 'empty',
                                         control.exec,
                                         control.tooltip || control.command || name || ''
