@@ -1,5 +1,5 @@
 /**
- * WYSIWYG - jQuery plugin 0.9
+ * WYSIWYG - jQuery plugin 0.91
  *
  * Copyright (c) 2008-2009 Juan M Martinez
  * http://plugins.jquery.com/project/jWYSIWYG
@@ -510,7 +510,41 @@
                                 this.viewHTML = !(this.viewHTML);
                          },
                          tooltip: 'View source code'
-                }
+                },
+                rtl: {
+                         visible : false,
+                         exec    : function()
+                         {
+                                 var selection = $(this.editor).documentSelection();
+                                 if ($("<div />").append(selection).children().length > 0) 
+                                 {
+                                         selection = $(selection).attr("dir", "rtl");
+                                 }
+                                 else
+                                 {
+                                         selection = $("<div />").attr("dir", "rtl").append(selection);
+                                 }
+                                 this.editorDoc.execCommand('inserthtml', false, $("<div />").append(selection).html());
+                        },
+                        tooltip : "Right to Left"
+                },
+                ltr: {
+                        visible : false,
+                        exec    : function()
+                        {
+                                var selection = $(this.editor).documentSelection();
+                                if ($("<div />").append(selection).children().length > 0) 
+                                {
+                                        selection = $(selection).attr("dir", "ltr");
+                                }
+                                else
+                                {
+                                        selection = $("<div />").attr("dir", "ltr").append(selection);
+                                }
+                                this.editorDoc.execCommand('inserthtml', false, $("<div />").append(selection).html());
+                        },
+                        tooltip : "Left to Right"
+               }
         };
 
         $.extend(Wysiwyg, {
