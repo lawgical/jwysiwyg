@@ -1,5 +1,5 @@
 /**
- * WYSIWYG - jQuery plugin 0.91
+ * WYSIWYG - jQuery plugin 0.92 (arigatou gozaimasu)
  *
  * Copyright (c) 2008-2009 Juan M Martinez
  * http://plugins.jquery.com/project/jWYSIWYG
@@ -76,6 +76,11 @@
                                 retValue = Wysiwyg[action].apply(this, params);
                         });
 						return retValue;
+                }
+
+                if (!(this.data('wysiwyg') === null))
+                {
+                        return this;
                 }
 
                 var controls = { };
@@ -248,7 +253,7 @@
                         {
                                 var selection = documentSelection.call($(this.editor));
 
-                                if (selection.length > 0)
+                                if (selection && selection.length > 0)
                                 {
                                         if ($.browser.msie)
                                         {
@@ -501,11 +506,18 @@
                                 {
                                         this.setContent($(this.original).val());
                                         $(this.original).hide();
+										$(this.editor).show();
                                 }
                                 else
                                 {
+									    var $ed = $(this.editor);
                                         this.saveContent();
-                                        $(this.original).show();
+                                        $(this.original).css({
+                                                width: $ed.outerWidth(),
+												height: $ed.outerHeight(),
+												resize: 'none'
+										}).show();
+										$ed.hide();
                                 }
 
                                 this.viewHTML = !(this.viewHTML);
@@ -589,7 +601,7 @@
                         {
                                 var selection = documentSelection.call($(self.editor));
 
-                                if (selection.length > 0)
+                                if (selection && selection.length > 0)
                                 {
                                         if ($.browser.msie)
                                         {
@@ -748,15 +760,6 @@
                                 if ($.browser.msie)
                                 {
                                         this.editor.css('height', (newY).toString() + 'px');
-
-                                        /**
-                                         var editor = $('<span></span>').css({
-                                         width	 : ( newX - 6 ).toString() + 'px',
-                                         height	: ( newY - 8 ).toString() + 'px'
-                                         }).attr('id', $(element).attr('id') + 'IFrame');
-
-                                         editor.outerHTML = this.editor.outerHTML;
-                                         */
                                 }
                         }
 
@@ -789,20 +792,17 @@
                                 }, this.options.resizeOptions));
                         }
 
-                        /**
-                         * http://code.google.com/p/jwysiwyg/issues/detail?id=100
-                         */
-                        var form = $(element).closest('form');
+                        var $form = $(element).closest('form');
 
                         if (this.options.autoSave)
                         {
-                                form.submit(function ()
+                                $form.submit(function ()
                                 {
                                         self.saveContent();
                                 });
                         }
 
-                        form.bind('reset', function ()
+                        $form.bind('reset', function ()
                         {
                                 self.setContent(self.initialContent);
                                 self.saveContent();
